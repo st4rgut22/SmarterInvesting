@@ -7,11 +7,11 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
+import com.iscool.edward.stockmarkettwitter.Company.Reading;
+import com.iscool.edward.stockmarkettwitter.Company.Topic;
 import com.iscool.edward.stockmarkettwitter.database.AnswerSchema.AnswerTable;
-import com.iscool.edward.stockmarkettwitter.database.PlayerSchema;
 import com.iscool.edward.stockmarkettwitter.database.QuizSchema.QuizTable;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema.ReadingTable;
