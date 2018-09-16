@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id = "@+id/menuTopic"
+        android:title="Add Reading"
+        />
+    <item android:id="@+id/menuRead"
+        android:title="Quiz Me"
+        />
+    <item android:id="@+id/menuBuyStock"
+        android:title="Buy Stock"
+        />
+    <item android:id="@+id/menuAsset"
+        android:title="Assets"
+        />
+</menu>

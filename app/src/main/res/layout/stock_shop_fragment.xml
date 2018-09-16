@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stockName"
+        android:textSize="30sp"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stockPrice"
+        android:layout_centerInParent="true"
+        android:textSize="30sp"
+        android:layout_below="@id/stockName"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bankFunds"
+        android:layout_centerInParent="true"
+        android:textSize="30sp"
+        android:layout_below="@id/stockPrice"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quantityText"
+        android:text="Quantity"
+        android:textSize="30sp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/bankFunds"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quantity"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/quantityText"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buyStock"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/quantity"
+        android:text="Buy"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/availableFund"
+        android:text="Not Enough Funds"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textSize="30sp"
+        android:layout_below="@id/buyStock"/>
+</RelativeLayout>

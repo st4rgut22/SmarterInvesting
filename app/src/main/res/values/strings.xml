@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Smarter Investing</string>
+    <string name="takeQuizBtn">Quiz Me!</string>
+    <string name="submitQuizBtn">Submit Quiz</string>
+</resources>
