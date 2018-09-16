@@ -6,6 +6,9 @@ API and several libraries all which are included in the links below. To run this
 of 24. 
 
 Shoutout to these hardworking open source community
-    implementation 'org.patriques:alphavantage4j:1.2'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    implementation 'com.android.volley:volley:1.1.0-rc1'
+    
+    'org.patriques:alphavantage4j:1.2'
+    
+    'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    
+    'com.android.volley:volley:1.1.0-rc1'
