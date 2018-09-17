@@ -4,6 +4,8 @@ publiclly traded companies. Made for all ages, the SmarterInvesting app creates 
 by accumulating cash and purchasing stock, all updated in realtime using the AlphaAdvantage API. The app relies on MediaWiki
 API and several libraries (listed below). This app only runs on devices with a minimum API 26. 
 
+Check out the demo on YouTube: https://www.youtube.com/watch?v=7tKhJi8WZDk&feature=youtu.be
+
 Shoutout to these hardworking open source community
     
     'org.patriques:alphavantage4j:1.2'
