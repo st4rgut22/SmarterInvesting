@@ -1,5 +1,6 @@
 package com.iscool.edward.stockmarkettwitter;
 
+import android.os.Build;
 import android.util.Log;
 
 import org.patriques.AlphaVantageConnector;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Chart {
+public class StockChart {
     private static String TAG = "com.iscool.edward";
     private static String apiKey = "B1TV3DJKTJMVUHOC";
 
@@ -24,6 +25,7 @@ public class Chart {
     public StockPrice lastMinute(String stockSymbol){
         int timeout = 3000;
         double lastPrice=0;
+        int lastTime = 0;
         AlphaVantageConnector apiConnector = new AlphaVantageConnector(apiKey, timeout);
         TimeSeries stockTimeSeries = new TimeSeries(apiConnector);
 
@@ -32,11 +34,12 @@ public class Chart {
             Map<String, String> metaData = response.getMetaData();
             List<StockData> stockData = response.getStockData();
             lastPrice = stockData.get(stockData.size()-1).getLow();
+            lastTime = getTime(stockData.get(stockData.size()-1).getDateTime());
         }
         catch (AlphaVantageException e) {
             System.out.println("something went wrong");
         }
-        StockPrice lastStockPrice = new StockPrice(lastPrice,0);
+        StockPrice lastStockPrice = new StockPrice(lastPrice,lastTime);
         return lastStockPrice;
     }
 
@@ -72,7 +75,8 @@ public class Chart {
             List<StockData> stockData = response.getStockData();
             dayOfMonth = LocalDateTime.now().getDayOfMonth();
             for (StockData stock:stockData){
-                //convert from localDateTime to integer (minutes)
+                //convert from localDateTime to integer (minutes
+                // if )
                 if (dayOfMonth!=stock.getDateTime().getDayOfMonth()){
                     break;
                 }
@@ -80,12 +84,6 @@ public class Chart {
                 double price = stock.getLow();
                 StockPrice stockPrice = new StockPrice(price,minutes);
                 mStockPrices.add(0,stockPrice);
-                Log.d(TAG,"day of month: " + stock.getDateTime().getDayOfMonth() + " hour: " + stock.getDateTime().getHour() + ":" + stock.getDateTime().getMinute() + ":00 and price is " + price);
-//                System.out.println("open:   " + stockData.get(i).getOpen());
-//                System.out.println("high:   " + stockData.get(i).getHigh());
-//                System.out.println("low:    " + stockData.get(i).getLow());
-//                System.out.println("close:  " + stockData.get(i).getClose());
-//                System.out.println("volume: " + stockData.get(i).getVolume());
             }
         } catch (AlphaVantageException e) {
             e.printStackTrace();

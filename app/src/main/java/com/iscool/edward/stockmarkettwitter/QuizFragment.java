@@ -1,7 +1,5 @@
 package com.iscool.edward.stockmarkettwitter;
 
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import com.iscool.edward.stockmarkettwitter.database.QuizSchema;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class QuizFragment extends Fragment {
     ArrayList<Quiz>quizList;

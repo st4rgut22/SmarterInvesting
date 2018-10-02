@@ -5,6 +5,7 @@ public class PlayerSchema {
         public static final String NAME = "playerName";
         public static final class Cols{
             public static final String MONEY = "money";
+            public static final String TOPIC = "topic";
         }
     }
 }

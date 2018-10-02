@@ -1,13 +1,14 @@
 package com.iscool.edward.stockmarkettwitter;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,23 +31,9 @@ public class ReadingFragment extends Fragment {
         quizOrBuy = (String) getArguments().getSerializable(QuizActivity.buyOrQuiz);
     }
 
-    public void buildReadList(Cursor c){
-        if(c.moveToFirst()) {
-            do {
-                String title = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.TITLE));
-                String uuid = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.UUID));
-                String ticker = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.TICKER));
-                library.add(new Reading(title, UUID.fromString(uuid), ticker));
-            }
-            while (c.moveToNext());
-        }
-        else {
-            //add more readings!
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.reading_fragment,container,false);
         Button addRead = v.findViewById(R.id.addReading);
         library = new ArrayList<Reading>();
@@ -68,5 +55,17 @@ public class ReadingFragment extends Fragment {
             recyclerView.setAdapter(readingAdapter);
         }
         return v;
+    }
+
+    public void buildReadList(Cursor c){
+        if(c.moveToFirst()) {
+            do {
+                String title = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.TITLE));
+                String uuid = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.UUID));
+                String ticker = c.getString(c.getColumnIndex(ReadingSchema.ReadingTable.Cols.TICKER));
+                library.add(new Reading(title, UUID.fromString(uuid), ticker));
+            }
+            while (c.moveToNext());
+        }
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,17 +8,21 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textSize="20sp"
+        android:text="Test 1"
         android:id = "@+id/quizId"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textSize="20sp"
+        android:layout_alignParentRight="true"
         android:id="@+id/quizScore"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Take Quiz"
+        android:layout_alignParentRight="true"
         android:layout_margin="10dp"
+        android:layout_gravity="right"
         android:id="@+id/quizClose"/>
-</LinearLayout>
+</RelativeLayout>

@@ -1,7 +1,6 @@
 package com.iscool.edward.stockmarkettwitter;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,14 +21,13 @@ public class AssetFragment extends Fragment {
     SqlLite mSqlLite;
     ArrayList<Asset>mAssetArrayList;
 
-    @SuppressWarnings("unchecked")
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mSqlLite = new SqlLite(getActivity());
         Serializable serialArray = getArguments().getSerializable(((AssetActivity)getActivity()).arrayName);
         mAssetArrayList = (ArrayList)serialArray;
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -38,6 +36,7 @@ public class AssetFragment extends Fragment {
         RecyclerView rc = v.findViewById(R.id.assetRecyclerView);
         Button buyBtn = v.findViewById(R.id.buyStock);
         rc.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         if (mAssetArrayList.size()!=0){
             buyBtn.setVisibility(GONE);
             TextView netWorth = (TextView)v.findViewById(R.id.netWorth);
@@ -45,6 +44,8 @@ public class AssetFragment extends Fragment {
             rc.setAdapter(adapter);
         }
         else {
+            TextView msg = v.findViewById(R.id.msg);
+            msg.setVisibility(View.VISIBLE);
             buyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

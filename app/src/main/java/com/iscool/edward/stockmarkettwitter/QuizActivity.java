@@ -1,24 +1,19 @@
 package com.iscool.edward.stockmarkettwitter;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.iscool.edward.stockmarkettwitter.database.SharedViewModel;
 
-public class QuizActivity extends FragmentActivity implements ReadingAdapter.onReadingClicked {
+public class QuizActivity extends AppCompatActivity implements ReadingAdapter.onReadingClicked {
     private SharedViewModel model;
     //global variables bad??
     TopicFragment topicFragment;
@@ -26,17 +21,20 @@ public class QuizActivity extends FragmentActivity implements ReadingAdapter.onR
     static String readUUID;
     protected static String readOrTopic = "com.iscool.edward.stockmarkettwitter.readOrTopic";
     protected static String buyOrQuiz = "com.iscool.edward.stockmarkettwitter.buyOrQuiz";
-    Fragment firstFrag;
-    Fragment secondFrag;
     String first;
-    String showSec;
     protected FragmentManager fm;
 
-    public static Intent newIntent(String first,String second, Context context){
-        Intent i = new Intent(context,QuizActivity.class);
-        i.putExtra(readOrTopic,first);
-        i.putExtra(buyOrQuiz,second);
-        return i;
+//    @Override
+//    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu, menu);
+//        return true;
+//    }
+
+    @Override
+    public void onBackPressed(){
+        fm.popBackStack();
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,46 @@ public class QuizActivity extends FragmentActivity implements ReadingAdapter.onR
         if (fragment == null) {
             first = readTopic();
             whichSwitch(first);
+        }
+    }
+
+    public static Intent newIntent(String first,String second, Context context){
+        Intent i = new Intent(context,QuizActivity.class);
+        i.putExtra(readOrTopic,first);
+        i.putExtra(buyOrQuiz,second); //if its read, then buy or quiz?
+        return i;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.menuAsset:
+                Intent i = new Intent(this,AssetActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.menuRead:
+                Intent j = QuizActivity.newIntent("read","quiz",this);
+                startActivity(j);
+                return true;
+            case R.id.menuBuyStock:
+                Intent k = QuizActivity.newIntent("read","buy",this);
+                startActivity(k);
+                return true;
+            case R.id.menuTopic:
+                Intent l = QuizActivity.newIntent("topic","read",this);
+                startActivity(l);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
     }
 
@@ -79,7 +117,6 @@ public class QuizActivity extends FragmentActivity implements ReadingAdapter.onR
     @Override
     public void onReadingClicked(String readUUID){
         this.readUUID=readUUID;
-        Log.d("onReadingClicked() in QuizActivity set readUUID as ", readUUID);
     }
 
     public void whichSwitch(String which){
@@ -92,14 +129,6 @@ public class QuizActivity extends FragmentActivity implements ReadingAdapter.onR
         else {
             System.out.println("what you choose? I dont get it");
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
     }
 
     public void switch2Quiz(){

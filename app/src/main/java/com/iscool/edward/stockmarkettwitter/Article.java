@@ -3,13 +3,8 @@ package com.iscool.edward.stockmarkettwitter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
-import android.database.CursorWrapper;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.RequiresPermission;
 import android.text.Html;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +15,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.iscool.edward.stockmarkettwitter.QuizCursorWrapper;
+import com.iscool.edward.stockmarkettwitter.SqlLite;
 import com.iscool.edward.stockmarkettwitter.database.AnswerSchema.AnswerTable;
-import com.iscool.edward.stockmarkettwitter.database.QuizSchema;
 import com.iscool.edward.stockmarkettwitter.database.QuizSchema.QuizTable;
-import com.iscool.edward.stockmarkettwitter.database.ReadingSchema;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema.ReadingTable;
 
 public class Article {
@@ -59,9 +54,34 @@ public class Article {
     }
 
     public static String createQuiz(String quiz){
-        quiz = quiz.replaceAll("<a href((?![[0-9]+]).)*?</a>", "_________");
-        return quiz;
+        String easyWay = quiz.replaceAll("<a href((?![[0-9]+]).)*?</a>","???");
+        System.out.println(easyWay);
+        Pattern p = Pattern.compile("<a href((?![[0-9]+]).)*?</a>");
+        Matcher m = p.matcher(quiz);
+        String replaceStr;
+        String newString="";
+        int end=0;
+        int questionNumber = 1;
+        int startIndex=0;
+        int endIndex=0;
+        while (m.find()){
+            startIndex = m.start();
+            newString+=quiz.substring(endIndex,startIndex);
+            endIndex = m.end();
+            newString += "__"+questionNumber+"__";
+            questionNumber++;
+        }
+//        System.out.println(quiz.length());
+//        System.out.println(quiz.substring(endIndex));
+        newString+=quiz.substring(endIndex);
+//        System.out.println(quiz.substring(endIndex,quiz.length()));
+//        System.out.println(easyWay);
+//        System.out.println(quiz.substring(endIndex,quiz.length()));
+
+        return newString;
     }
+
+
 
     public static ArrayList<String> getAnswer(SqlLite sqlLite,String uuid){
         ArrayList<String>aList = new ArrayList<String>();
@@ -126,13 +146,13 @@ public class Article {
         db.updateRow(QuizTable.NAME,quizValue,QuizTable.Cols.UUID + "=?",new String[]{quizUUID});
     }
 
-    public static void incProgress(SqlLite db,String readUUID){
+    public static int incProgress(SqlLite db,String readUUID){
         Cursor c = db.queryReading(ReadingTable.Cols.UUID + " = ?", new String[]{readUUID});
         String ticker="";
+        int progress=0;
         if (c!=null){
             c.moveToFirst();
-            ticker = c.getString(c.getColumnIndex(ReadingTable.Cols.TICKER));
-            int progress = c.getInt(c.getColumnIndex(ReadingTable.Cols.PROGRESS));
+            progress = c.getInt(c.getColumnIndex(ReadingTable.Cols.PROGRESS));
             progress++;
             ContentValues cv = new ContentValues();
             cv.put("progress",progress);
@@ -141,6 +161,7 @@ public class Article {
         else {
             Log.d(TAG,"could not retrieve progress value");
         }
+        return progress;
     }
 
     public static String removeLinks(String quiz){

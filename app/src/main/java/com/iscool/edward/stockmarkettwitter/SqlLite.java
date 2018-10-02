@@ -9,9 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.iscool.edward.stockmarkettwitter.Company.Reading;
-import com.iscool.edward.stockmarkettwitter.Company.Topic;
 import com.iscool.edward.stockmarkettwitter.database.AnswerSchema.AnswerTable;
+import com.iscool.edward.stockmarkettwitter.database.PlayerSchema;
 import com.iscool.edward.stockmarkettwitter.database.QuizSchema.QuizTable;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema.ReadingTable;
@@ -51,9 +50,10 @@ public class SqlLite extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public ContentValues setPlayerContentValues(int money){
+    public ContentValues setPlayerContentValues(int money,int topic){
         ContentValues values = new ContentValues();
         values.put(PlayerTable.Cols.MONEY,money);
+        values.put(PlayerTable.Cols.TOPIC,topic);
         return values;
     }
 
@@ -277,21 +277,44 @@ public class SqlLite extends SQLiteOpenHelper {
         topicList = new ArrayList<Topic>();
         ArrayList<Reading>company0 = new ArrayList<Reading>();
         company0.add(new Reading("Mattel",UUID.randomUUID(),"MAT"));
+        company0.add(new Reading("Hasbro",UUID.randomUUID(),"HAS"));
+        company0.add(new Reading("Build A Bear Workshop",UUID.randomUUID(),"BBW"));
+        company0.add(new Reading("Jakks Pacific",UUID.randomUUID(),"JAKK"));
         ArrayList<Reading>company1 = new ArrayList<Reading>();
-        company1.add(new Reading("Kawasaki_Heavy_Industries",UUID.randomUUID(),"KWHIY"));
+        company1.add(new Reading("Kawasaki Heavy Industries",UUID.randomUUID(),"KWHIY"));
+        company1.add(new Reading("IRobot",UUID.randomUUID(),"IRBT"));
+        company1.add(new Reading("Rockwell Automation",UUID.randomUUID(),"ROK"));
+        company1.add(new Reading("Oceaneering International",UUID.randomUUID(),"OII"));
         ArrayList<Reading>company2 = new ArrayList<Reading>();
         company2.add(new Reading("SeaWorld",UUID.randomUUID(),"SEAS"));
+        company2.add(new Reading("PetMed Express",UUID.randomUUID(),"PETS"));
+        company2.add(new Reading("Neogen",UUID.randomUUID(),"NEOG"));
+        company2.add(new Reading("Idexx Laboratories",UUID.randomUUID(),"IDXX"));
         ArrayList<Reading>company3 = new ArrayList<Reading>();
         company3.add(new Reading("Pfizer",UUID.randomUUID(),"PFE"));
+        company3.add(new Reading("AbbVie",UUID.randomUUID(),"abbv"));
+        company3.add(new Reading("McKesson Corporation",UUID.randomUUID(),"MCK"));
+        company3.add(new Reading("UnitedHealth Group",UUID.randomUUID(),"UNH"));
         ArrayList<Reading>company4 = new ArrayList<Reading>();
         company4.add(new Reading("McDonalds",UUID.randomUUID(),"MCD"));
+        company4.add(new Reading("Chipotle Mexican Grill",UUID.randomUUID(),"CMG"));
+        company4.add(new Reading("Starbucks",UUID.randomUUID(),"SBUX"));
+        company4.add(new Reading("The Coca-Cola Company",UUID.randomUUID(),"KO"));
         ArrayList<Reading>company5 = new ArrayList<Reading>();
         company5.add(new Reading("Samsung",UUID.randomUUID(),"SSNLF"));
+        company5.add(new Reading("Apple Inc.",UUID.randomUUID(),"AAPL"));
+        company5.add(new Reading("Qualcomm",UUID.randomUUID(),"QCOM"));
         ArrayList<Reading>company6 = new ArrayList<Reading>();
         company6.add(new Reading("Dick's_Sporting_Goods",UUID.randomUUID(),"DKS"));
+        company6.add(new Reading("Lululemon Athletica",UUID.randomUUID(),"LULU"));
+        company6.add(new Reading("Under Armour",UUID.randomUUID(),"UAA"));
+        company6.add(new Reading("Nike, Inc.",UUID.randomUUID(),"NKE"));
         ArrayList<Reading>company7 = new ArrayList<Reading>();
-        company7.add(new Reading("Blizzard_Entertainment",UUID.randomUUID(),"ATVI"));
-        Topic toy = new Topic("Toy",R.drawable.minion,company0);
+        company7.add(new Reading("Blizzard Entertainment",UUID.randomUUID(),"ATVI"));
+        company7.add(new Reading("Sony",UUID.randomUUID(),"SNE"));
+        company7.add(new Reading("Take Two Interactive",UUID.randomUUID(),"TTWO"));
+        company7.add(new Reading("Electronic Arts",UUID.randomUUID(),"EA"));
+        Topic toy = new Topic("Toy", R.drawable.minion,company0);
         Topic robot = new Topic("Robot",R.drawable.robot,company1);
         Topic animal = new Topic("Animal",R.drawable.animal,company2);
         Topic medicine = new Topic("Medicine",R.drawable.medicine,company3);
@@ -320,7 +343,7 @@ public class SqlLite extends SQLiteOpenHelper {
     }
 
     public void initPlayerTable(){
-        ContentValues cv = setPlayerContentValues(0);
+        ContentValues cv = setPlayerContentValues(0,0);
         insertRow(PlayerTable.NAME,cv);
     }
 
@@ -348,7 +371,8 @@ public class SqlLite extends SQLiteOpenHelper {
                 TopicTable.Cols.ID + ", " +
                 TopicTable.Cols.TITLE + ")");
         db.execSQL("CREATE TABLE " + PlayerTable.NAME + "(" +
-                PlayerTable.Cols.MONEY + ")");
+                PlayerTable.Cols.MONEY + ", " +
+                PlayerTable.Cols.TOPIC + ")");
         db.execSQL("CREATE TABLE " + TopicNameTable.NAME + "(" +
                 TopicNameTable.Cols.COMPANY + ", " +
                 TopicNameTable.Cols.FOREIGNID + ", " +

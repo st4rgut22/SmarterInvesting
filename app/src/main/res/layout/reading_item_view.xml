@@ -5,7 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/readList"
-    android:background="#0F0"
+    android:background="@drawable/dollar"
     android:layout_margin="10dp"
 >
     <LinearLayout
@@ -15,6 +15,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/readTitle"
+        android:textColor="#000"
+        android:textStyle="bold"
         android:layout_margin="10dp"
         android:textSize="20sp"
     />

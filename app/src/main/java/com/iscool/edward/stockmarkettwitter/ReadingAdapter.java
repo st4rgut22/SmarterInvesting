@@ -3,7 +3,7 @@ package com.iscool.edward.stockmarkettwitter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +52,7 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.ReadingH
             priceRead = v.findViewById(R.id.priceRead);
             chartDifficult = v.findViewById(R.id.chartDifficulty);
         }
+
         public void bindQuizReading(Reading reading){
             //we bind the view to the data object
             mTextView.setText(reading.title);
@@ -75,11 +76,16 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.ReadingH
                 }
             });
         }
+
         public void bindStockReading(Reading reading){
             //we bind the view to the data object
             mTextView.setText(reading.title);
             priceRead.setText("Buy");
             chartDifficult.setText("Chart");
+            if (Build.VERSION.SDK_INT<26){
+                //localDateTime requires API 26
+                chartDifficult.setVisibility(View.GONE);
+            }
             String str = reading.title;
             Cursor c = mSqlLite.queryReading(ReadingSchema.ReadingTable.Cols.TITLE + "=?",new String[]{str});
             String uuid;

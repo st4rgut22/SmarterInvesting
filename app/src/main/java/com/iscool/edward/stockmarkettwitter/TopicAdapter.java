@@ -1,16 +1,11 @@
 package com.iscool.edward.stockmarkettwitter;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iscool.edward.stockmarkettwitter.database.PlayerSchema;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema;
-import com.iscool.edward.stockmarkettwitter.database.SharedViewModel;
 import com.iscool.edward.stockmarkettwitter.database.TopicNameSchema;
 import com.iscool.edward.stockmarkettwitter.database.TopicSchema;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -60,7 +53,9 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
             mLinearLayout = itemView.findViewById(R.id.topicLayout);
         }
         public void bindTopic(final Topic topic){
-            btn.setBackground(mContext.getDrawable(topic.imgurl));
+            if (Build.VERSION.SDK_INT>=21) {
+                btn.setBackground(mContext.getDrawable(topic.imgurl));
+            }
             btn.setText(topic.category);
             mTextView.setText(topic.category);
             mLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -74,32 +69,15 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
                     title = tv.getText().toString();
                     //add a reading
                     Cursor c = sqlLite.queryTopic(TopicSchema.TopicTable.Cols.TITLE + " = ?",new String[]{title});
-                    //delegate this to the reading fragment
+                    //check if any companies exist underr this topic
                     if (c.moveToFirst()) {
                         Log.d(TAG,"retrieve the topic success");
                         String id = c.getString(c.getColumnIndex(TopicSchema.TopicTable.Cols.ID));
-                        //find the id of the topic
-                        //query the topicName table for a company whose FOREIGNID equals the topic id
-                        c = sqlLite.queryTopicName(TopicNameSchema.TopicNameTable.Cols.FOREIGNID + " = ? ",new String[]{id});
-                        if (c.moveToFirst()){
-                            Log.d(TAG,"retrieve the company name success");
-                            String company = c.getString(c.getColumnIndex(TopicNameSchema.TopicNameTable.Cols.COMPANY));
-                            String _id = c.getString(c.getColumnIndex(TopicNameSchema.TopicNameTable.Cols.ID));
-                            String ticker = c.getString(c.getColumnIndex(TopicNameSchema.TopicNameTable.Cols.TICKER));
-                            //remove this entry from the topic Name table
-                            boolean remove = sqlLite.removeRow(TopicNameSchema.TopicNameTable.NAME, TopicNameSchema.TopicNameTable.Cols.COMPANY,company);
-                            if (remove){Log.d(TAG,"removed company name from topic name table");}
-                            //we got the new company, now add it as a reading
-                            ContentValues cv = sqlLite.setReadingContentValues(company,1, UUID.fromString(_id),0,ticker);
-                            boolean insert = sqlLite.insertRow(ReadingSchema.ReadingTable.NAME,cv);
-                            if (insert){Log.d(TAG,"inserted row into reading table");}
-                            Article article = new Article(mContext,company,_id);
-                            article.populateQuizTable();
-                            qa.switch2Read();
-                        }
-                        else {
-                            Log.d(TAG,"can't find a matching company. Add more for the index " + title);
-                        }
+                        Intent j = CompanyActivity.newIntent(mContext,id);
+                        mContext.startActivity(j);
+                    }
+                    else {
+                        Log.d(TAG,"can't find a matching company. Add more for the index " + title);
                     }
                 }
             });

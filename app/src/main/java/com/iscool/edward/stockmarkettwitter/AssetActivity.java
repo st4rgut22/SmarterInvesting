@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -15,7 +16,7 @@ import com.iscool.edward.stockmarkettwitter.database.AssetSchema;
 
 import java.util.ArrayList;
 
-public class AssetActivity extends FragmentActivity {
+public class AssetActivity extends AppCompatActivity {
     final static String shareCountTag = "com.iscool.edward.stockmarkettwitter.shareCount";
     final static String companyName = "com.iscool.edward.stockmarkettwitter.companyName";
     final static String tickerName = "com.iscool.edward.stockmarkettwitter.tickerName";
@@ -69,6 +70,37 @@ public class AssetActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.menuAsset:
+                return true;
+            case R.id.menuRead:
+                Intent j = QuizActivity.newIntent("read","quiz",this);
+                startActivity(j);
+                return true;
+            case R.id.menuBuyStock:
+                Intent k = QuizActivity.newIntent("read","buy",this);
+                startActivity(k);
+                return true;
+            case R.id.menuTopic:
+                Intent l = QuizActivity.newIntent("topic","read",this);
+                startActivity(l);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
     public void add2Assets(String company,int shares,String ticker){
         Cursor c = mSqlLite.queryAsset(AssetSchema.AssetTable.Cols.COMPANY + "=?",new String[]{company});
         c.moveToFirst();
@@ -78,7 +110,8 @@ public class AssetActivity extends FragmentActivity {
             ContentValues cv = mSqlLite.setAssetContentValues(shares,company,ticker);
             mSqlLite.insertRow(AssetSchema.AssetTable.NAME,cv);
         }
-        else {
+        else
+        {
             //update asset
             int currentShareCount = c.getInt(c.getColumnIndex(AssetSchema.AssetTable.Cols.SHARES));
             currentShareCount += shares;
@@ -86,6 +119,7 @@ public class AssetActivity extends FragmentActivity {
             mSqlLite.updateRow(AssetSchema.AssetTable.NAME, cv, AssetSchema.AssetTable.Cols.COMPANY + "=?", new String[]{company});
         }
     }
+
     public ArrayList<Asset> retrieveAssets(){
         ArrayList<Asset>aList = new ArrayList<>();
         Cursor allRows = mSqlLite.allRows(AssetSchema.AssetTable.NAME);

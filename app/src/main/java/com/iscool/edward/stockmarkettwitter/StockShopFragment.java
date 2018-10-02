@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iscool.edward.stockmarkettwitter.database.PlayerSchema;
 import com.iscool.edward.stockmarkettwitter.database.ReadingSchema;
@@ -48,6 +49,7 @@ public class StockShopFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.stock_shop_fragment,container,false);
         TextView stockName = v.findViewById(R.id.stockName);
         TextView stockPrice = v.findViewById(R.id.stockPrice);
@@ -71,7 +73,6 @@ public class StockShopFragment extends Fragment {
                     stockPrice.post(new Runnable() {
                         //executed on the main thread
                         public void run() {
-
                             stockPrice.setText("Stock Price: $" + Double.toString(price));
                         }
                     });
@@ -81,16 +82,22 @@ public class StockShopFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //what happen if left empty?
-                int quantity = Integer.parseInt((enterQuantity.getText()).toString());
-                double total = price*quantity;
-                if (money<total){
-                    available.setVisibility(View.VISIBLE);
+                try {
+                    int quantity = Integer.parseInt((enterQuantity.getText()).toString());
+                    double total = price*quantity;
+                    if (money<total){
+                        available.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        ContentValues cv = new ContentValues();
+                        cv.put("money",money-(int)total);
+                        mSqlLite.updateRow(PlayerSchema.PlayerTable.NAME,cv,null,null);
+                        Intent i = AssetActivity.newIntent(context, quantity, reading, ticker);
+                        startActivity(i);
+                    }
                 }
-                else {
-                    ContentValues cv = mSqlLite.setPlayerContentValues(money-(int)total);
-                    mSqlLite.updateRow(PlayerSchema.PlayerTable.NAME,cv,null,null);
-                    Intent i = AssetActivity.newIntent(context, quantity, reading, ticker);
-                    startActivity(i);
+                catch (NumberFormatException e){
+                    Toast.makeText(getActivity(),"You Can Only Purchase a Whole Number of Stocks",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -102,7 +109,7 @@ public class StockShopFragment extends Fragment {
     }
 
     double getStockPrice(){
-        price = Chart.currentPrice(ticker);
+        price = StockChart.currentPrice(ticker);
         return price;
     }
 

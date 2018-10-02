@@ -8,16 +8,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
+        android:layout_margin="10dp"
         android:id="@+id/netWorth"/>
     <!--buy stock if there are no assets-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:text="You haven't bought any stocks yet. Start earning some mulah."
+        android:id="@+id/msg"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buyStock"
+        android:layout_margin="10dp"
         android:text="Buy Stock"/>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
         android:id="@+id/assetRecyclerView">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

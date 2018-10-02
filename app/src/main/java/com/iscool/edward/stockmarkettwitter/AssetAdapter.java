@@ -46,7 +46,7 @@ public class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.AssetHolder>
             //create thread
             new Thread(new Runnable(){
                 public void run(){
-                    double price = Chart.currentPrice(asset.ticker);
+                    double price = StockChart.currentPrice(asset.ticker);
                     totalCapital+=Math.round(price*asset.shares);
                     assetPrice.post(new Runnable(){
                         public void run(){
